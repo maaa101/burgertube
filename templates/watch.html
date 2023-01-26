@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ videoInfo.title }}</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}" />
+</head>
+
+<div class="topnav">
+    <nav>
+        <form action="/results" type="GET">
+            <a class="burgertube" href="/">Burgertube</a>
+            <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search">
+        </form>
+    </nav>
+</div>
+<br><br><br>
+
+<div class="split left">
+    <video width="1920" height="1080" controls>
+        <source src="/api/watch/{{ videoInfo.id }}" type="video/mp4">
+        Your browser does not support video playback.
+    </video>
+    <h2>{{ videoInfo.title }}</h2>
+    <p class="description">{{ videoInfo.description }}</p>
+</div>
+
+<div class="split right">
+    <p>More videos</p>
+    <iframe src="/api/similar/{{ videoInfo.id }}"></iframe>
+</div>
+
+<body>
+
+</body>
+
+</html>

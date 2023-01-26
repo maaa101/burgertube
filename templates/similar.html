@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    <base target="_parent">
+</head>
+
+{% for video in results %}
+    {% if video.thumbnails[0].width > video.thumbnails[0].height %}
+    <div class="video">
+        <a class="videolink" href="/watch?v={{ video.id }}">
+            <img loading="lazy" src="{{ video.thumbnails[0].url }}">
+            <p>{{ video.title }}</p>
+            <a class="uploader" href="/channel/{{ video.channel_id }}">
+                <p>{{ video.channel }} • {{ video.view_count }} views</p>
+            </a>
+        </a>
+    </div>
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,116 @@
+#!/usr/bin/python3
+import os
+import configparser
+from yt_dlp import YoutubeDL
+from flask import Flask, render_template, request, url_for, flash, redirect, session, make_response, send_from_directory
+
+# Define flask
+app = Flask(__name__)
+
+
+# Read configuration
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+HOST = config["config"]["HOST"]
+PORT = config["config"]["PORT"]
+CACHE_FOLDER = config["config"]["CACHE_FOLDER"]
+
+
+ydl_opts = {"format": "best[ext=mp4]",
+            "noplaylist": "True",
+            "extract_flat": "in_playlist",
+            "outtmpl": CACHE_FOLDER + "/%(id)s.mp4",
+            "match-filters": "%(height)d >= %(width)d"}
+
+
+# Delete directory
+def DeleteDir(dir):
+    if dir[-1] == os.sep:
+        dir = dir[:-1]
+    files = os.listdir(dir)
+    for file in files:
+        if file == '.' or file == '..':
+            continue
+        path = dir + os.sep + file
+        if os.path.isdir(path):
+            nukedir(path)
+        else:
+            os.unlink(path)
+    os.rmdir(dir)
+
+
+# Reset cache
+def ResetCache():
+    if not os.path.exists(CACHE_FOLDER):
+        os.mkdir(CACHE_FOLDER)
+    else:
+        DeleteDir(CACHE_FOLDER)
+        os.mkdir(CACHE_FOLDER)
+
+
+def SearchYouTube(query, max):
+    with YoutubeDL(ydl_opts) as ydl:
+        searchresults = ydl.extract_info(f"ytsearch{max}:{query}", download=False)[
+            "entries"][0:max]
+        return searchresults
+
+
+def GetInfo(id, download):
+    with YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(id, download=download)
+        return info
+
+
+@app.route("/", methods=("GET", "POST"))
+def home():
+    return render_template("main.html")
+
+
+@app.route("/results", methods=("GET", "POST"))
+def results():
+    search_query = request.args.get("search_query")
+    if search_query:
+        searchresults = SearchYouTube(search_query, 50)
+        return render_template("main.html", results=searchresults, searchquery=search_query)
+    else:
+        return redirect("/")
+
+    return render_template("main.html")
+
+
+@app.route("/watch", methods=("GET", "POST"))
+def watch():
+    videoid = request.args.get("v")
+    if videoid:
+        videoInfo = GetInfo(videoid, False)
+        return render_template("watch.html", videoInfo=videoInfo)
+    else:
+        redirect("/")
+
+
+@app.route("/api/watch/<id>", methods=("GET", "POST"))
+def apiwatch(id):
+    GetInfo(id, True)
+    return send_from_directory(CACHE_FOLDER, id + ".mp4")
+
+
+@app.route("/api/similar/<id>", methods=("GET", "POST"))
+def apisimilar(id):
+    searchresults = SearchYouTube(id, 20)
+    return render_template("similar.html", results=searchresults)
+
+
+@app.route("/channel/<id>", methods=("GET", "POST"))
+def channelredir(id):
+    return id
+
+
+# Start server
+if __name__ == "__main__":
+    ResetCache()
+    print("Server started")
+    from waitress import serve
+    serve(app, host=HOST, port=PORT)
+    ResetCache()
+    print("Server stopped")
