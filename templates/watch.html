@@ -24,7 +24,7 @@
 <body>
 
     <div class="split left">
-        <video id="hd-video" width="520" height="292.5" autoplay controls>
+        <video id="hd-video" width="520" height="292.5" controls>
             <source src="/api/watch/{{ videoInfo.id }}/0" type="video/webm">
             <source src="/api/watch/{{ videoInfo.id }}/0" type="video/mp4">
             Your browser does not support video playback.
@@ -73,6 +73,8 @@
         hdVideo.onvolumechange = function () {
             hdVideo.volume = 0
         }
+        hdVideo.play()
+        hdAudio.play()
         hdVideo.volume = 0
     </script>
 
