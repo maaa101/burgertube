@@ -116,7 +116,7 @@ body {
     margin-left: 25px;
     border: none;
     width: calc(100% - 50px);
-    height: calc(100% - 55px);
+    height: calc(100% - 65px);
 }
 
 .hidden {
