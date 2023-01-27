@@ -89,6 +89,14 @@ body {
     white-space: pre-line
 }
 
+.left .channel {
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #303030;
+    color: #ffffff;
+    text-decoration: none;
+}
+
 .right {
     right: 0;
 }

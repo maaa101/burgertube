@@ -35,7 +35,10 @@
         </audio>
 
         <h2>{{ videoInfo.title }}</h2>
+        <a class="channel" href="/channel/{{ videoInfo.channel_id }}">{{ videoInfo.channel }}</a>
+        <a>{{ videoInfo.channel_follower_count }} subscribers</a>
         <p class="description">{{ videoInfo.description }}</p>
+        <br><br><br><br>
     </div>
 
     <div class="split right">
@@ -67,6 +70,10 @@
         hdVideo.onstalled = function () {
             hdAudio.pause();
         };
+        hdVideo.onvolumechange = function () {
+            hdVideo.volume = 0
+        }
+        hdVideo.volume = 0
     </script>
 
 </body>
