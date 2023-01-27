@@ -16,12 +16,14 @@ HOST = config["config"]["HOST"]
 PORT = config["config"]["PORT"]
 CACHE_FOLDER = config["config"]["CACHE_FOLDER"]
 
+# [ext=mp4]
 
-ydl_opts = {"format": "best[ext=mp4]",
+ydl_opts = {"format": "bv+ba[ext=webm]",
             "noplaylist": "True",
             "extract_flat": "in_playlist",
-            "outtmpl": CACHE_FOLDER + "/%(id)s.mp4",
-            "match-filters": "%(height)d >= %(width)d"}
+            "outtmpl": CACHE_FOLDER + "/%(id)s.webm",
+            "match-filters": "%(height)d >= %(width)d",
+            "ffmpeg_location": "ffmpeg"}
 
 
 # Delete directory
@@ -91,8 +93,11 @@ def watch():
 
 @app.route("/api/watch/<id>", methods=("GET", "POST"))
 def apiwatch(id):
-    GetInfo(id, True)
-    return send_from_directory(CACHE_FOLDER, id + ".mp4")
+    if not os.path.exists(os.path.join(CACHE_FOLDER,  id + ".webm")):
+        GetInfo(id, True)
+        return send_from_directory(CACHE_FOLDER, id + ".webm")
+    else:
+        return send_from_directory(CACHE_FOLDER, id + ".webm")
 
 
 @app.route("/api/similar/<id>", methods=("GET", "POST"))
