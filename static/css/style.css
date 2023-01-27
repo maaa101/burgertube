@@ -101,5 +101,23 @@ body {
     margin-left: 25px;
     border: none;
     width: calc(100% - 50px);
-    height: 100%;
+    height: calc(100% - 55px);
+}
+
+.hidden {
+    display: none;
+}
+
+.startpage {
+    text-align: center;
+}
+
+.startpage input {
+    color: white;
+    background-color: #121212;
+    padding: 8px;
+    width: calc(50%);
+    border-color: #303030;
+    border-width: 1px;
+    font-size: 16px;
 }

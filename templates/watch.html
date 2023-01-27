@@ -21,21 +21,53 @@
 </div>
 <br><br><br>
 
-<div class="split left">
-    <video width="520" height="292.5" controls autoplay>
-        <source src="/api/watch/{{ videoInfo.id }}" type="video/mp4">
-        Your browser does not support video playback.
-    </video>
-    <h2>{{ videoInfo.title }}</h2>
-    <p class="description">{{ videoInfo.description }}</p>
-</div>
-
-<div class="split right">
-    <p>More videos</p>
-    <iframe src="/api/similar/{{ videoInfo.id }}"></iframe>
-</div>
-
 <body>
+
+    <div class="split left">
+        <video id="hd-video" width="520" height="292.5" autoplay controls>
+            <source src="/api/watch/{{ videoInfo.id }}/1" type="video/webm">
+            <source src="/api/watch/{{ videoInfo.id }}/1" type="video/mp4">
+            Your browser does not support video playback.
+        </video>
+        <audio id="hd-audio" class="hidden" controls>
+            <source src="/api/watch/{{ videoInfo.id }}/2" type="audio/mpeg">
+            Your browser does not support the audio playback.
+        </audio>
+
+        <h2>{{ videoInfo.title }}</h2>
+        <p class="description">{{ videoInfo.description }}</p>
+    </div>
+
+    <div class="split right">
+        <p>More videos</p>
+        <iframe src="/api/similar/{{ videoInfo.id }}"></iframe>
+    </div>
+
+    <script>
+        var hdVideo = document.getElementById("hd-video");
+        var hdAudio = document.getElementById("hd-audio");
+
+        hdVideo.oncuechange = function () {
+            hdAudio.currentTime = hdVideo.currentTime;
+        };
+        hdVideo.onseeked = function () {
+            hdAudio.currentTime = hdVideo.currentTime;
+        };
+        hdVideo.onpause = function () {
+            hdAudio.pause();
+            hdAudio.currentTime = hdVideo.currentTime;
+        };
+        hdVideo.onplay = function () {
+            hdAudio.play();
+            hdAudio.currentTime = hdVideo.currentTime;
+        };
+        hdVideo.onerror = function () {
+            hdAudio.pause();
+        };
+        hdVideo.onstalled = function () {
+            hdAudio.pause();
+        };
+    </script>
 
 </body>
 

@@ -14,16 +14,12 @@ config.read("config.ini")
 
 HOST = config["config"]["HOST"]
 PORT = config["config"]["PORT"]
-CACHE_FOLDER = config["config"]["CACHE_FOLDER"]
 
 # [ext=mp4]
 
 ydl_opts = {"format": "bv+ba[ext=webm]",
             "noplaylist": "True",
-            "extract_flat": "in_playlist",
-            "outtmpl": CACHE_FOLDER + "/%(id)s.webm",
-            "match-filters": "%(height)d >= %(width)d",
-            "ffmpeg_location": "ffmpeg"}
+            "extract_flat": "in_playlist"}
 
 
 # Delete directory
@@ -42,15 +38,6 @@ def DeleteDir(dir):
     os.rmdir(dir)
 
 
-# Reset cache
-def ResetCache():
-    if not os.path.exists(CACHE_FOLDER):
-        os.mkdir(CACHE_FOLDER)
-    else:
-        DeleteDir(CACHE_FOLDER)
-        os.mkdir(CACHE_FOLDER)
-
-
 def SearchYouTube(query, max):
     with YoutubeDL(ydl_opts) as ydl:
         searchresults = ydl.extract_info(f"ytsearch{max}:{query}", download=False)[
@@ -58,22 +45,22 @@ def SearchYouTube(query, max):
         return searchresults
 
 
-def GetInfo(id, download):
+def GetInfo(id):
     with YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(id, download=download)
+        info = ydl.extract_info(id, download=False)
         return info
 
 
 @app.route("/", methods=("GET", "POST"))
 def home():
-    return render_template("main.html")
+    return render_template("main.html", startpage="startpage")
 
 
 @app.route("/results", methods=("GET", "POST"))
 def results():
     search_query = request.args.get("search_query")
     if search_query:
-        searchresults = SearchYouTube(search_query, 50)
+        searchresults = SearchYouTube(search_query, 60)
         return render_template("main.html", results=searchresults, searchquery=search_query)
     else:
         return redirect("/")
@@ -85,19 +72,37 @@ def results():
 def watch():
     videoid = request.args.get("v")
     if videoid:
-        videoInfo = GetInfo(videoid, False)
+        videoInfo = GetInfo(videoid)
         return render_template("watch.html", videoInfo=videoInfo)
     else:
         redirect("/")
 
 
-@app.route("/api/watch/<id>", methods=("GET", "POST"))
-def apiwatch(id):
-    if not os.path.exists(os.path.join(CACHE_FOLDER,  id + ".webm")):
-        GetInfo(id, True)
-        return send_from_directory(CACHE_FOLDER, id + ".webm")
+@app.route("/api/watch/<id>/<quality>", methods=("GET", "POST"))
+def apiwatch(id, quality):
+    videoInfo = GetInfo(id)
+    videoURL = ""
+    if str(quality) == "0":
+        videoURL = videoInfo["formats"][21]["url"]
+    elif str(quality) == "1":
+        try:
+            videoURL = videoInfo["formats"][32]["url"]
+        except:
+            videoURL = videoInfo["formats"][27]["url"]
+        else:
+            videoURL = videoInfo["formats"][25]["url"]
+        finally:
+            videoURL = videoInfo["formats"][22]["url"]
     else:
-        return send_from_directory(CACHE_FOLDER, id + ".webm")
+        try:
+            videoURL = videoInfo["formats"][9]["url"]
+        except:
+            videoURL = videoInfo["formats"][8]["url"]
+        else:
+            videoURL = videoInfo["formats"][7]["url"]
+        finally:
+            videoURL = videoInfo["formats"][6]["url"]
+    return redirect(videoURL)
 
 
 @app.route("/api/similar/<id>", methods=("GET", "POST"))
@@ -113,9 +118,7 @@ def channelredir(id):
 
 # Start server
 if __name__ == "__main__":
-    ResetCache()
     print("Server started")
     from waitress import serve
     serve(app, host=HOST, port=PORT)
-    ResetCache()
     print("Server stopped")

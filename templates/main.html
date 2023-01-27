@@ -21,6 +21,16 @@
 </div>
 <br><br><br>
 
+{% if startpage %}
+<div class="startpage">
+    <h1>Burgertube</h1>
+    <h2>Privacy-respecting YouTube frontend</h2>
+    <form action="/results" type="GET">
+        <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search">
+    </form>
+</div>
+{% endif %}
+
 <div class="videogrid">
     {% for video in results %}
     {% if video.thumbnails[0].width > video.thumbnails[0].height %}
