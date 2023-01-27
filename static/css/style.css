@@ -89,6 +89,13 @@ body {
     white-space: pre-line
 }
 
+.left .warning {
+    padding: 4px;
+    background-color: #fcedd2;
+    border-radius: 4px;
+    color: #8f6211
+}
+
 .left .channel {
     border-radius: 4px;
     padding: 4px;

@@ -33,7 +33,10 @@
             <source src="/api/watch/{{ videoInfo.id }}/1" type="audio/mpeg">
             Your browser does not support the audio playback.
         </audio>
-
+        <noscript>
+        <br>
+        <a class="warning">JavaScript is required for audio playback.</a>
+        </noscript>
         <h2>{{ videoInfo.title }}</h2>
         <a class="channel" href="/channel/{{ videoInfo.channel_id }}">{{ videoInfo.channel }}</a>
         <a>{{ videoInfo.channel_follower_count }} subscribers</a>
