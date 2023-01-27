@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os
+import subprocess
 import configparser
 from yt_dlp import YoutubeDL
 from flask import Flask, render_template, request, url_for, flash, redirect, session, make_response, send_from_directory
@@ -79,30 +80,17 @@ def watch():
         redirect("/")
 
 
-@app.route("/api/watch/<id>/<quality>", methods=("GET", "POST"))
-def apiwatch(id, quality):
-    videoInfo = GetInfo(id)
+@app.route("/api/watch/<id>/<format>", methods=("GET", "POST"))
+def apiwatch(id, format):
     videoURL = ""
-    if str(quality) == "0":
-        videoURL = videoInfo["formats"][21]["url"]
-    elif str(quality) == "1":
-        try:
-            videoURL = videoInfo["formats"][32]["url"]
-        except:
-            videoURL = videoInfo["formats"][29]["url"]
-        else:
-            videoURL = videoInfo["formats"][27]["url"]
-        finally:
-            videoURL = videoInfo["formats"][25]["url"]
+    if str(format) == "0":
+        with YoutubeDL({"format": "bv"}) as ydl:
+            info_dict = ydl.extract_info(id, download=False)
+            videoURL = info_dict["url"]
     else:
-        try:
-            videoURL = videoInfo["formats"][9]["url"]
-        except:
-            videoURL = videoInfo["formats"][8]["url"]
-        else:
-            videoURL = videoInfo["formats"][7]["url"]
-        finally:
-            videoURL = videoInfo["formats"][4]["url"]
+         with YoutubeDL({"format": "ba"}) as ydl:
+            info_dict = ydl.extract_info(id, download=False)
+            videoURL = info_dict["url"]
     return redirect(videoURL)
 
 
