@@ -87,9 +87,9 @@ def apiwatch(id, quality):
         videoURL = videoInfo["formats"][21]["url"]
     elif str(quality) == "1":
         try:
-            videoURL = videoInfo["formats"][37]["url"]
-        except:
             videoURL = videoInfo["formats"][32]["url"]
+        except:
+            videoURL = videoInfo["formats"][29]["url"]
         else:
             videoURL = videoInfo["formats"][27]["url"]
         finally:
