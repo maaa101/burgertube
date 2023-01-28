@@ -86,7 +86,11 @@ body {
 }
 
 .left .description {
-    white-space: pre-line
+    white-space: pre-line;
+}
+
+.left a {
+    color: #3ea6ff;
 }
 
 .left .warning {
@@ -102,6 +106,10 @@ body {
     background-color: #303030;
     color: #ffffff;
     text-decoration: none;
+}
+
+.left .subscribers {
+    color: white;
 }
 
 .right {
@@ -138,12 +146,17 @@ body {
 }
 
 .channelInfo {
+    
+}
 
+.channelInfo a {
+    color: #3ea6ff;
 }
 
 .channelInfo .description {
     white-space: pre-line;
     margin: 10px;
+    color: white;
 }
 
 .channelInfo .subscribers {

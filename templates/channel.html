@@ -24,7 +24,7 @@
     <img class="thumbnail" src="{{ channelInfo.thumbnails.15.url }}">
     <h1 class="title">{{ channelInfo.title }}</h1>
     <p class="subscribers">{{ channelInfo.channel_follower_count }} subscribers</p>
-    <p class="description">{{ channelInfo.description }}</p>
+    <p class="description">{{ channelInfo.description | urlize(50, true) }}</p>
 </div>
 
 <body>

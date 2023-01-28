@@ -39,8 +39,8 @@
         </noscript>
         <h2>{{ videoInfo.title }}</h2>
         <a class="channel" href="/channel/{{ videoInfo.channel_id }}">{{ videoInfo.channel }}</a>
-        <a>{{ videoInfo.channel_follower_count }} subscribers</a>
-        <p class="description">{{ videoInfo.description }}</p>
+        <a class="subscribers">{{ videoInfo.channel_follower_count }} subscribers</a>
+        <p class="description">{{ videoInfo.description | urlize(40) }}</p>
         <br><br><br><br>
     </div>
 
