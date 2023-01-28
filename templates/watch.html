@@ -68,16 +68,21 @@
             hdAudio.currentTime = hdVideo.currentTime;
         };
         hdVideo.onerror = function () {
+            hdAudio.currentTime = hdVideo.currentTime;
             hdAudio.pause();
         };
         hdVideo.onstalled = function () {
+            hdAudio.currentTime = hdVideo.currentTime;
             hdAudio.pause();
+        };
+        hdVideo.onloadeddata = function () {
+            hdAudio.currentTime = hdVideo.currentTime;
+            hdVideo.play()
+            hdAudio.play()
         };
         hdVideo.onvolumechange = function () {
             hdVideo.volume = 0
         }
-        hdVideo.play()
-        hdAudio.play()
         hdVideo.volume = 0
     </script>
 
