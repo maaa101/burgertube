@@ -22,6 +22,10 @@ ydl_opts = {"format": "bv+ba[ext=webm]",
             "noplaylist": "True",
             "extract_flat": "in_playlist"}
 
+channel_info_ydl_opts = {"format": "bv+ba[ext=webm]",
+            "noplaylist": "True",
+            "playlist_items": "0"}
+
 
 # Delete directory
 def DeleteDir(dir):
@@ -46,8 +50,8 @@ def SearchYouTube(query, max):
         return searchresults
 
 
-def GetInfo(id):
-    with YoutubeDL(ydl_opts) as ydl:
+def GetInfo(id, opts):
+    with YoutubeDL(opts) as ydl:
         info = ydl.extract_info(id, download=False)
         return info
 
@@ -73,7 +77,7 @@ def results():
 def watch():
     videoid = request.args.get("v")
     if videoid:
-        videoInfo = GetInfo(videoid)
+        videoInfo = GetInfo(videoid, ydl_opts)
         #return videoInfo
         return render_template("watch.html", videoInfo=videoInfo)
     else:
@@ -101,8 +105,10 @@ def apisimilar(id):
 
 
 @app.route("/channel/<id>", methods=("GET", "POST"))
-def channelredir(id):
-    return id
+def channel(id):
+    channelInfo = GetInfo("https://youtube.com/channel/" + id, channel_info_ydl_opts)
+    #return channelInfo
+    return render_template("channel.html", channelInfo=channelInfo)
 
 
 # Start server

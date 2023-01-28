@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ channelInfo.title }}</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}" />
+</head>
+
+<div class="topnav">
+    <nav>
+        <form action="/results" type="GET">
+            <a class="burgertube" href="/">Burgertube</a>
+            <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search">
+        </form>
+    </nav>
+</div>
+<br><br><br>
+<div class="channelInfo">
+    <img class="thumbnail" src="{{ channelInfo.thumbnails.15.url }}">
+    <h1 class="title">{{ channelInfo.title }}</h1>
+    <p class="subscribers">{{ channelInfo.channel_follower_count }} subscribers</p>
+    <p class="description">{{ channelInfo.description }}</p>
+</div>
+
+<body>
+</body>
+
+</html>
