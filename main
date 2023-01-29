@@ -16,15 +16,19 @@ config.read("config.ini")
 HOST = config["config"]["HOST"]
 PORT = config["config"]["PORT"]
 
+DEFAULTSTYLESHEET = "/static/css/style.css"
+
 # [ext=mp4]
 
 ydl_opts = {"format": "bv+ba[ext=webm]",
             "noplaylist": "True",
-            "extract_flat": "in_playlist"}
+            "extract_flat": "in_playlist",
+            "quiet": "True"}
 
 channel_info_ydl_opts = {"format": "bv+ba[ext=webm]",
-            "noplaylist": "True",
-            "playlist_items": "0"}
+                         "noplaylist": "True",
+                         "playlist_items": "0",
+                         "quiet": "True"}
 
 
 # Delete directory
@@ -56,9 +60,17 @@ def GetInfo(id, opts):
         return info
 
 
+def GetStyle():
+    if "style" in request.cookies:
+        style = request.cookies.get("style")
+    else:
+        style = DEFAULTSTYLESHEET
+    return style
+
+
 @app.route("/", methods=("GET", "POST"))
 def home():
-    return render_template("main.html", startpage="startpage")
+    return render_template("main.html", style=GetStyle(), startpage="startpage")
 
 
 @app.route("/results", methods=("GET", "POST"))
@@ -66,11 +78,9 @@ def results():
     search_query = request.args.get("search_query")
     if search_query:
         searchresults = SearchYouTube(search_query, 60)
-        return render_template("main.html", results=searchresults, searchquery=search_query)
+        return render_template("main.html", style=GetStyle(), results=searchresults, searchquery=search_query)
     else:
         return redirect("/")
-
-    return render_template("main.html")
 
 
 @app.route("/watch", methods=("GET", "POST"))
@@ -78,8 +88,8 @@ def watch():
     videoid = request.args.get("v")
     if videoid:
         videoInfo = GetInfo(videoid, ydl_opts)
-        #return videoInfo
-        return render_template("watch.html", videoInfo=videoInfo)
+        # return videoInfo
+        return render_template("watch.html", style=GetStyle(), videoInfo=videoInfo)
     else:
         redirect("/")
 
@@ -92,7 +102,7 @@ def apiwatch(id, format):
             info_dict = ydl.extract_info(id, download=False)
             videoURL = info_dict["url"]
     else:
-         with YoutubeDL({"format": "ba"}) as ydl:
+        with YoutubeDL({"format": "ba"}) as ydl:
             info_dict = ydl.extract_info(id, download=False)
             videoURL = info_dict["url"]
     return redirect(videoURL)
@@ -101,14 +111,36 @@ def apiwatch(id, format):
 @app.route("/api/similar/<id>", methods=("GET", "POST"))
 def apisimilar(id):
     searchresults = SearchYouTube(id, 20)
-    return render_template("similar.html", results=searchresults)
+    return render_template("similar.html", style=GetStyle(), results=searchresults)
 
 
 @app.route("/channel/<id>", methods=("GET", "POST"))
 def channel(id):
-    channelInfo = GetInfo("https://youtube.com/channel/" + id, channel_info_ydl_opts)
-    #return channelInfo
-    return render_template("channel.html", channelInfo=channelInfo)
+    channelInfo = GetInfo(
+        "https://youtube.com/channel/" + id, channel_info_ydl_opts)
+    # return channelInfo
+    return render_template("channel.html", style=GetStyle(), channelInfo=channelInfo)
+
+
+@app.route("/switchcss", methods=("GET", "POST"))
+def switchcss():
+    if request.method == "POST":
+        stylesheetlink = request.form["stylesheetlink"]
+        resp = make_response(redirect("/switchcss"))
+        resp.set_cookie("style", stylesheetlink)
+        return resp
+    return render_template("switchcss.html", style=GetStyle())
+
+
+@app.route("/support", methods=("GET", "POST"))
+def support():
+    return """
+    <h1>support burgertubeeeeeeeeeeee</h1>
+
+    if you could buy me something off my bandcamp wishlist, that would be nice
+    <br>
+    <a href="https://bandcamp.com/maaa101/wishlist">https://bandcamp.com/maaa101/wishlist</a>
+    """
 
 
 # Start server

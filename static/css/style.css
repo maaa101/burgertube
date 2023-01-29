@@ -135,6 +135,20 @@ body {
     text-align: center;
 }
 
+.startpage a {
+    text-decoration: none;
+    background-color: #0f0f0f;
+    border: solid;
+    border-width: 1px;
+    border-color: #303030;
+    padding: 7px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin: 5px;
+    border-radius: 20px;
+    color: white;
+}
+
 .startpage input {
     color: white;
     background-color: #121212;
@@ -145,9 +159,7 @@ body {
     font-size: 16px;
 }
 
-.channelInfo {
-    
-}
+.channelInfo {}
 
 .channelInfo a {
     color: #3ea6ff;

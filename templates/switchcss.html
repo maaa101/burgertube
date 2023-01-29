@@ -2,7 +2,11 @@
 <html>
 
 <head>
-    <title>{{ channelInfo.title }}</title>
+    {% if startpage %}
+    <title>Burgertube - Privacy-respecting YouTube frontend</title>
+    {% else %}
+    <title>{{ searchquery | title }}</title>
+    {% endif %}
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -18,14 +22,15 @@
     </nav>
 </div>
 <br><br><br>
-<div class="channelInfo">
-    <img class="thumbnail" src="{{ channelInfo.thumbnails.15.url }}">
-    <h1 class="title">{{ channelInfo.title }}</h1>
-    <p class="subscribers">{{ channelInfo.channel_follower_count }} subscribers</p>
-    <p class="description">{{ channelInfo.description | urlize(50, true) }}</p>
+
+<div class="startpage">
+    <br>
+    <p>Switch your CSS stylesheet!</p>
+    <form method="POST">
+        <input type="text" value="{{ style }}" name="stylesheetlink" placeholder="URL">
+    </form>
 </div>
 
-<body>
 </body>
 
 </html>

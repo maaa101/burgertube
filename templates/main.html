@@ -2,13 +2,15 @@
 <html>
 
 <head>
+    {% if startpage %}
+    <title>Burgertube - Privacy-respecting YouTube frontend</title>
+    {% else %}
     <title>{{ searchquery | title }}</title>
+    {% endif %}
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
-    <link rel="stylesheet" type="text/css"
-        href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ style }}" />
 </head>
 
 <div class="topnav">
@@ -26,8 +28,13 @@
     <h1>Burgertube</h1>
     <h2>Privacy-respecting YouTube frontend</h2>
     <form action="/results" type="GET">
-        <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search">
+        <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search YouTube">
     </form>
+    <br><br>
+    <a href="/support">Support Burgertube</a>
+    <a href="/switchcss">Switch CSS theme</a>
+    <a href="https://github.com/maaa101/burgertube">Git</a>
+
 </div>
 {% endif %}
 
