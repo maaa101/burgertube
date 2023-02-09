@@ -135,7 +135,7 @@ def switchcss():
 @app.route("/support", methods=("GET", "POST"))
 def support():
     return """
-    <h1>support burgertubeeeeeeeeeeee</h1>
+    <h1>support burgertube</h1>
 
     if you could buy me something off my bandcamp wishlist, that would be nice
     <br>
