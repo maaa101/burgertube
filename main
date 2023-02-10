@@ -2,6 +2,7 @@
 import os
 import subprocess
 import configparser
+from numerize import numerize
 from yt_dlp import YoutubeDL
 from flask import Flask, render_template, request, url_for, flash, redirect, session, make_response, send_from_directory
 
@@ -88,6 +89,7 @@ def watch():
     videoid = request.args.get("v")
     if videoid:
         videoInfo = GetInfo(videoid, ydl_opts)
+        videoInfo["channel_follower_count"] = numerize.numerize(videoInfo["channel_follower_count"])
         # return videoInfo
         return render_template("watch.html", style=GetStyle(), videoInfo=videoInfo)
     else:
@@ -118,7 +120,8 @@ def apisimilar(id):
 def channel(id):
     channelInfo = GetInfo(
         "https://youtube.com/channel/" + id, channel_info_ydl_opts)
-    # return channelInfo
+    channelInfo["channel_follower_count"] = numerize.numerize(channelInfo["channel_follower_count"])
+    #return channelInfo
     return render_template("channel.html", style=GetStyle(), channelInfo=channelInfo)
 
 
@@ -130,17 +133,6 @@ def switchcss():
         resp.set_cookie("style", stylesheetlink)
         return resp
     return render_template("switchcss.html", style=GetStyle())
-
-
-@app.route("/support", methods=("GET", "POST"))
-def support():
-    return """
-    <h1>support burgertube</h1>
-
-    if you could buy me something off my bandcamp wishlist, that would be nice
-    <br>
-    <a href="https://bandcamp.com/maaa101/wishlist">https://bandcamp.com/maaa101/wishlist</a>
-    """
 
 
 # Start server

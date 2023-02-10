@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{{ channelInfo.title }}</title>
+    <title>{{ channelInfo.channel }}</title>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -20,7 +20,7 @@
 <br><br><br>
 <div class="channelInfo">
     <img class="thumbnail" src="{{ channelInfo.thumbnails.15.url }}">
-    <h1 class="title">{{ channelInfo.title }}</h1>
+    <h1 class="title">{{ channelInfo.channel }}</h1>
     <p class="subscribers">{{ channelInfo.channel_follower_count }} subscribers</p>
     <p class="description">{{ channelInfo.description | urlize(50, true) }}</p>
 </div>
