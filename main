@@ -71,7 +71,8 @@ def GetStyle():
 
 @app.route("/", methods=("GET", "POST"))
 def home():
-    return render_template("main.html", style=GetStyle(), startpage="startpage")
+    results = GetInfo("https://youtube.com/", ydl_opts)
+    return render_template("main.html", style=GetStyle(), results=results["entries"], startpage="startpage")
 
 
 @app.route("/results", methods=("GET", "POST"))
@@ -90,7 +91,6 @@ def watch():
     if videoid:
         videoInfo = GetInfo(videoid, ydl_opts)
         videoInfo["channel_follower_count"] = numerize.numerize(videoInfo["channel_follower_count"])
-        # return videoInfo
         return render_template("watch.html", style=GetStyle(), videoInfo=videoInfo)
     else:
         redirect("/")
@@ -133,6 +133,16 @@ def switchcss():
         resp.set_cookie("style", stylesheetlink)
         return resp
     return render_template("switchcss.html", style=GetStyle())
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("error.html", error="This page does not exist. (404)", style=GetStyle())
+
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template("error.html", error="Something wrong happened. (500)", style=GetStyle())
 
 
 # Start server

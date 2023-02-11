@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% if startpage %}
+    <title>Burgertube - Privacy-respecting YouTube frontend</title>
+    {% else %}
+    <title>{{ searchquery | title }}</title>
+    {% endif %}
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ style }}" />
+</head>
+
+<body>
+
+    <div class="topnav">
+        <nav>
+            <form action="/results" type="GET">
+                <a class="burgertube" href="/">Burgertube</a>
+                <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search">
+            </form>
+        </nav>
+    </div>
+    <br><br><br>
+
+    {{ error }}
+</body>
+
+</html>

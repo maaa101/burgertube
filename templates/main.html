@@ -13,50 +13,44 @@
     <link rel="stylesheet" type="text/css" href="{{ style }}" />
 </head>
 
-<div class="topnav">
-    <nav>
-        <form action="/results" type="GET">
-            <a class="burgertube" href="/">Burgertube</a>
-            <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search">
-        </form>
-    </nav>
-</div>
-<br><br><br>
-
-{% if startpage %}
-<div class="startpage">
-    <br>
-    <h1>Burgertube</h1>
-    <h2>An alternative front-end to YouTube</h2>
-    <form action="/results" type="GET">
-        <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search YouTube">
-    </form>
-    <br>
-    <div class="bottom">
-        <a href="/switchcss">Switch CSS stylesheet</a>
-        <a href="https://github.com/maaa101/burgertube">GitHub</a>
-    </div>
-</div>
-{% endif %}
-
-<div class="videogrid">
-    {% for video in results %}
-    {% if video.thumbnails[0].width > video.thumbnails[0].height %}
-    <div class="video">
-        <a class="videolink" href="/watch?v={{ video.id }}">
-            <img loading="lazy" src="{{ video.thumbnails[0].url }}">
-            <p>{{ video.title }}</p>
-            <a class="uploader" href="/channel/{{ video.channel_id }}">
-                <p>{{ video.channel }} • {{ video.view_count }} views</p>
-            </a>
-        </a>
-    </div>
-    {% endif %}
-    {% endfor %}
-</div>
-
 <body>
 
+    <div class="topnav">
+        <nav>
+            <form action="/results" type="GET">
+                <a class="burgertube" href="/">Burgertube</a>
+                <input type="search" value="{{ searchquery }}" name="search_query" placeholder="Search">
+            </form>
+        </nav>
+    </div>
+    <br><br><br>
+
+    {% if startpage %}
+    <div class="startpage">
+        <br>
+        <h1>Burgertube</h1>
+        <h2>An alternative front-end to YouTube</h2>
+        <a href="/switchcss">Switch CSS stylesheet</a>
+        <a href="https://github.com/maaa101/burgertube">GitHub</a>
+        <br><br>
+    </div>
+    {% endif %}
+
+    <div class="videogrid">
+        {% for video in results %}
+        {% if video.thumbnails[0].width > video.thumbnails[0].height %}
+        <div class="video">
+            <a class="videolink" href="/watch?v={{ video.id }}">
+                <img loading="lazy" src="{{ video.thumbnails[0].url }}">
+                <p>{{ video.title }}</p>
+                <a class="uploader" href="/channel/{{ video.channel_id }}">
+                    <p>{{ video.channel }} • {{ video.view_count }} views</p>
+                </a>
+            </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
 </body>
 
 </html>
